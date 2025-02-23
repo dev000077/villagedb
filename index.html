@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Village Data Base</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        h1 {
+            text-align: center;
+        }
+        #filters {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+            align-items: center;
+        }
+        #search-bar {
+            width: 200px; /* Smaller size for the search bar */
+            padding: 8px;
+            margin-right: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1em;
+        }
+        #taluk-dropdown {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1em;
+        }
+        #village-count {
+            margin-left: 10px;
+            font-size: 1em;
+            font-weight: bold;
+            color: #333;
+        }
+        #taluk-list {
+            list-style-type: none;
+            padding: 0;
+        }
+        .taluk-item {
+            background-color: white;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin: 10px 0;
+            padding: 15px;
+        }
+        .taluk-item h3 {
+            margin: 0;
+            font-size: 1.5em;
+            color: #333;
+        }
+        .taluk-item p {
+            margin: 5px 0 10px;
+            color: #555;
+            font-size: 1em;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Village DB</h1>
+    <p style="text-align: center;">ആലപ്പുഴ ജില്ലയിലെ  വില്ലേജ്/താലൂക്ക് ഓഫീസുകൾ സംബന്ധിച്ച  ഒരു കുട്ടി ഡാറ്റാബേസ് </p>
+
+    <!-- Filters Section (Search Bar + Taluk Dropdown) -->
+    <div id="filters">
+        <input type="text" id="search-bar" placeholder="Search..." oninput="filterTaluks()" />
+        <select id="taluk-dropdown" onchange="filterTaluks()">
+            <option value="">Select Taluk</option>
+        </select>
+        <span id="village-count">0 Villages</span>
+    </div>
+
+    <div id="loading-message" style="text-align: center;">Loading...</div>
+    <ul id="taluk-list"></ul>
+
+    <script>
+        // URL of the raw JSON data from GitHub
+        const jsonUrl = 'https://raw.githubusercontent.com/josephjosedev/TESTNODE/main/villagedb.json';
+
+        let allTaluks = [];
+
+        // Fetch the JSON data
+        fetch(jsonUrl)
+            .then(response => response.json())
+            .then(data => {
+                allTaluks = data; // Store the data for later search
+                populateTalukDropdown(); // Populate the dropdown with Taluks
+                displayTaluks(allTaluks); // Display all taluks initially
+                document.getElementById('loading-message').style.display = 'none'; // Hide the loading message
+            })
+            .catch(error => {
+                console.error('Error fetching data:', error);
+                document.getElementById('loading-message').innerText = 'Failed to load data';
+            });
+
+        // Populate the dropdown with unique Taluk options
+        function populateTalukDropdown() {
+            const talukDropdown = document.getElementById('taluk-dropdown');
+            const taluks = [...new Set(allTaluks.map(taluk => taluk['Taluk']))]; // Get unique Taluks
+            taluks.forEach(taluk => {
+                const option = document.createElement('option');
+                option.value = taluk;
+                option.innerText = taluk;
+                talukDropdown.appendChild(option);
+            });
+        }
+
+        // Function to display the taluks
+        function displayTaluks(taluks) {
+            const taluksList = document.getElementById('taluk-list');
+            taluksList.innerHTML = ''; // Clear the list before re-rendering
+
+            taluks.forEach(taluk => {
+                const listItem = document.createElement('li');
+                listItem.className = 'taluk-item';
+
+                let talukHtml = `
+                    <h3>${taluk['Village Name']}</h3>
+                    <p><strong>Village Name:</strong> ${taluk['Village Name']}</p>
+                    <p><strong>Village Officer Name:</strong> ${taluk['Village Officer Name']}</p>
+                    <p><strong>Taluk:</strong> ${taluk['Taluk']}</p>
+                    <p><strong>Mobile Number:</strong> ${taluk['Mobile_Number']}</p>
+                    <p><strong>e-Mail ID:</strong> ${taluk['Official Mail ID']}</p>
+                `;
+
+                listItem.innerHTML = talukHtml;
+                taluksList.appendChild(listItem);
+            });
+        }
+
+        // Function to filter taluks based on the search query and dropdown selection
+        function filterTaluks() {
+            const searchQuery = document.getElementById('search-bar').value.toLowerCase();
+            const selectedTaluk = document.getElementById('taluk-dropdown').value;
+
+            // Filter the taluks based on both the search query and the selected Taluk
+            const filteredTaluks = allTaluks.filter(taluk => {
+                const matchesSearch = taluk.Taluk.toLowerCase().includes(searchQuery) ||
+                                      taluk['Village Name'].toLowerCase().includes(searchQuery) ||
+                                      taluk['Mobile_Number'].includes(searchQuery);
+                const matchesTalukFilter = selectedTaluk === "" || taluk.Taluk === selectedTaluk;
+                return matchesSearch && matchesTalukFilter;
+            });
+
+            displayTaluks(filteredTaluks); // Display the filtered taluks
+
+            // Update village count
+            document.getElementById('village-count').innerText = `${filteredTaluks.length} Villages`;
+        }
+    </script>
+
+</body>
+</html>
