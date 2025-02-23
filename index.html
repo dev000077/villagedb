@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Village Data Base|Alappuzha|KSITM Alappuzha</title>
+    <title>Village Data Base</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -21,7 +21,7 @@
             align-items: center;
         }
         #search-bar {
-            width: 200px; /* Smaller size for the search bar */
+            width: 200px;
             padding: 8px;
             margin-right: 20px;
             border: 1px solid #ddd;
@@ -66,7 +66,7 @@
 <body>
 
     <h1>Village DB</h1>
-    <p style="text-align: center;">ആലപ്പുഴ ജില്ലയിലെ  വില്ലേജ്/താലൂക്ക് ഓഫീസുകൾ സംബന്ധിച്ച  ഒരു കുട്ടി ഡാറ്റാബേസ് </p>
+    <p style="text-align: center;">ആലപ്പുഴ ജില്ലയില്‍ ഉള്ള  വില്ലേജ്/താലൂക്ക് ഓഫിസുകളോട് ബന്ധപ്പെട്ട ഒരു ഡാറ്റാബേസ്</p>
 
     <!-- Filters Section (Search Bar + Taluk Dropdown) -->
     <div id="filters">
@@ -83,9 +83,9 @@
     <script>
         // URL of the raw JSON data from GitHub
         const jsonUrl = 'https://raw.githubusercontent.com/josephjosedev/TESTNODE/main/villagedb.json';
-
+    
         let allTaluks = [];
-
+    
         // Fetch the JSON data
         fetch(jsonUrl)
             .then(response => response.json())
@@ -93,13 +93,14 @@
                 allTaluks = data; // Store the data for later search
                 populateTalukDropdown(); // Populate the dropdown with Taluks
                 displayTaluks(allTaluks); // Display all taluks initially
+                updateVillageCount(allTaluks); // Set initial unique village count
                 document.getElementById('loading-message').style.display = 'none'; // Hide the loading message
             })
             .catch(error => {
                 console.error('Error fetching data:', error);
                 document.getElementById('loading-message').innerText = 'Failed to load data';
             });
-
+    
         // Populate the dropdown with unique Taluk options
         function populateTalukDropdown() {
             const talukDropdown = document.getElementById('taluk-dropdown');
@@ -111,16 +112,16 @@
                 talukDropdown.appendChild(option);
             });
         }
-
+    
         // Function to display the taluks
         function displayTaluks(taluks) {
             const taluksList = document.getElementById('taluk-list');
             taluksList.innerHTML = ''; // Clear the list before re-rendering
-
+    
             taluks.forEach(taluk => {
                 const listItem = document.createElement('li');
                 listItem.className = 'taluk-item';
-
+    
                 let talukHtml = `
                     <h3>${taluk['Village Name']}</h3>
                     <p><strong>Village Name:</strong> ${taluk['Village Name']}</p>
@@ -129,17 +130,28 @@
                     <p><strong>Mobile Number:</strong> ${taluk['Mobile_Number']}</p>
                     <p><strong>e-Mail ID:</strong> ${taluk['Official Mail ID']}</p>
                 `;
-
+    
                 listItem.innerHTML = talukHtml;
                 taluksList.appendChild(listItem);
             });
         }
-
+    
+        // Function to update the village count, excluding null or empty village names
+        function updateVillageCount(taluks) {
+            // Create a set of unique village names, trim spaces, and normalize case
+            const uniqueVillages = new Set(
+                taluks
+                    .filter(taluk => taluk['Village Name'] && taluk['Village Name'].trim()) // Exclude null or empty village names
+                    .map(taluk => taluk['Village Name'].trim().toLowerCase()) // Normalize case and remove extra spaces
+            );
+            document.getElementById('village-count').innerText = `${uniqueVillages.size} Villages`;
+        }
+    
         // Function to filter taluks based on the search query and dropdown selection
         function filterTaluks() {
             const searchQuery = document.getElementById('search-bar').value.toLowerCase();
             const selectedTaluk = document.getElementById('taluk-dropdown').value;
-
+    
             // Filter the taluks based on both the search query and the selected Taluk
             const filteredTaluks = allTaluks.filter(taluk => {
                 const matchesSearch = taluk.Taluk.toLowerCase().includes(searchQuery) ||
@@ -148,13 +160,9 @@
                 const matchesTalukFilter = selectedTaluk === "" || taluk.Taluk === selectedTaluk;
                 return matchesSearch && matchesTalukFilter;
             });
-
+    
             displayTaluks(filteredTaluks); // Display the filtered taluks
-
-            // Update village count
-            document.getElementById('village-count').innerText = `${filteredTaluks.length} Villages`;
+            updateVillageCount(filteredTaluks); // Update the village count based on filtered results
         }
     </script>
-
-</body>
-</html>
+    
