@@ -3,10 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Chilanka&display=swap" rel="stylesheet">
-    <title>Village Data Base|KSITM Alappuzha</title>
+    <title>Village Data Base</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -69,7 +66,7 @@
 <body>
 
     <h1>Village DB</h1>
-    <p style="text-align: center;font-family: Chilanka;serif;font-weight: 400;font-style: normal;">ആലപ്പുഴ ജില്ലയിലെ  വില്ലേജ്/താലൂക്ക് ഓഫീസുകൾ സംബന്ധിച്ച  ഒരു കുട്ടി ഡാറ്റാബേസ്</p>
+    <p style="text-align: center;">ആലപ്പുഴ ജില്ലയില്‍ ഉള്ള  വില്ലേജ്/താലൂക്ക് ഓഫിസുകളോട് ബന്ധപ്പെട്ട ഒരു ഡാറ്റാബേസ്</p>
 
     <!-- Filters Section (Search Bar + Taluk Dropdown) -->
     <div id="filters">
@@ -127,12 +124,12 @@
     
                 let talukHtml = `
                     <h3>${taluk['Village Name']}</h3>
-                   <p><strong>Village Name:</strong> ${taluk['Village Name']}</p>
-                    <p><strong>Taluk:</strong> ${taluk['Taluk']}</p>
+                    <p><strong>Village Name:</strong> ${taluk['Village Name']}</p>
                     <p><strong>Village Officer Name:</strong> ${taluk['Village Officer Name']}</p>
+                    <p><strong>Taluk:</strong> ${taluk['Taluk']}</p>
                     <p><strong>Mobile Number:</strong> ${taluk['Mobile_Number']}</p>
                     <p><strong>e-Mail ID:</strong> ${taluk['Official Mail ID']}</p>
-                     <p><strong>Village Pin Code:</strong> ${taluk['Pincode']}</p>
+                    <p><strong>Pincode:</strong> ${taluk['Pincode']}</p>
                 `;
     
                 listItem.innerHTML = talukHtml;
@@ -160,7 +157,9 @@
             const filteredTaluks = allTaluks.filter(taluk => {
                 const matchesSearch = taluk.Taluk.toLowerCase().includes(searchQuery) ||
                                       taluk['Village Name'].toLowerCase().includes(searchQuery) ||
-                                      taluk['Mobile_Number'].includes(searchQuery);
+                                      taluk['Village Officer Name'].toLowerCase().includes(searchQuery) ||
+                                      taluk['Official Mail ID'].toLowerCase().includes(searchQuery) ||
+                                      taluk['Pincode'].toLowerCase().includes(searchQuery);
                 const matchesTalukFilter = selectedTaluk === "" || taluk.Taluk === selectedTaluk;
                 return matchesSearch && matchesTalukFilter;
             });
@@ -169,4 +168,5 @@
             updateVillageCount(filteredTaluks); // Update the village count based on filtered results
         }
     </script>
-    
+</body>
+</html>
