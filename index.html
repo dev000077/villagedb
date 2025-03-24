@@ -4,22 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="preconnect" href="https://fonts.googleapis.com">
-
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-
-<link href="https://fonts.googleapis.com/css2?family=Chilanka&display=swap" rel="stylesheet">
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-W13FX0Y12R"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-W13FX0Y12R');
-</script>
-
-    <title>Village Data Base|KSITM Alappuzha|Village Offices in Alappuzha</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Chilanka&display=swap" rel="stylesheet">
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-W13FX0Y12R"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-W13FX0Y12R');
+    </script>
+    <title>Village Data Base | KSITM Alappuzha | Village Offices in Alappuzha</title>
 
     <style>
         body {
@@ -57,6 +51,17 @@
             font-weight: bold;
             color: #333;
         }
+        #last-updated {
+            position: fixed;
+            top: 10px;
+            right: 20px;
+            font-size: 0.9em;
+            color: #666;
+            background-color: #fff;
+            padding: 5px 10px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
         #taluk-list {
             list-style-type: none;
             padding: 0;
@@ -83,8 +88,9 @@
 <body>
 
     <h1>Village DB</h1>
-    <p style="text-align: center;font-family: Chilanka;serif;font-weight: 400;font-style: normal;">ആലപ്പുഴ ജില്ലയിലെ  വില്ലേജ്/താലൂക്ക് ഓഫീസുകൾ സംബന്ധിച്ച  ഒരു കുട്ടി ഡാറ്റാബേസ്</p>
-<!--     <p style="text-align: center;">ആലപ്പുഴ ജില്ലയില്‍ ഉള്ള  വില്ലേജ്/താലൂക്ക് ഓഫിസുകളോട് ബന്ധപ്പെട്ട ഒരു ഡാറ്റാബേസ്</p> -->
+    <p style="text-align: center;font-family: Chilanka;serif;font-weight: 400;font-style: normal;">
+        ആലപ്പുഴ ജില്ലയിലെ  വില്ലേജ്/താലൂക്ക് ഓഫീസുകൾ സംബന്ധിച്ച  ഒരു കുട്ടി ഡാറ്റാബേസ്
+    </p>
 
     <!-- Filters Section (Search Bar + Taluk Dropdown) -->
     <div id="filters">
@@ -98,17 +104,32 @@
     <div id="loading-message" style="text-align: center;">Loading...</div>
     <ul id="taluk-list"></ul>
 
+    <div id="last-updated"></div>
+
     <script>
-        // URL of the raw JSON data from GitHub
         const jsonUrl = 'https://raw.githubusercontent.com/josephjosedev/TESTNODE/main/villagedb.json';
+        const githubApiUrl = 'https://api.github.com/repos/josephjosedev/TESTNODE/commits/main'; // GitHub API to get last commit details
     
         let allTaluks = [];
     
-        // Fetch the JSON data
-        fetch(jsonUrl)
+        // Fetch the JSON data and get the last updated timestamp from GitHub
+        fetch(githubApiUrl)
             .then(response => response.json())
             .then(data => {
-                allTaluks = data; // Store the data for later search
+                const lastUpdated = data.commit.committer.date; // Get the last commit date from the GitHub API
+                
+                // Format the last updated date
+                const updatedDate = new Date(lastUpdated);
+                const formattedDate = updatedDate.toLocaleString();
+
+                document.getElementById('last-updated').innerText = `Last Updated: ${formattedDate}`;
+
+                // Now, fetch the village data
+                return fetch(jsonUrl);
+            })
+            .then(response => response.json())
+            .then(data => {
+                allTaluks = data;
                 populateTalukDropdown(); // Populate the dropdown with Taluks
                 displayTaluks(allTaluks); // Display all taluks initially
                 updateVillageCount(allTaluks); // Set initial unique village count
@@ -157,11 +178,10 @@
     
         // Function to update the village count, excluding null or empty village names
         function updateVillageCount(taluks) {
-            // Create a set of unique village names, trim spaces, and normalize case
             const uniqueVillages = new Set(
                 taluks
-                    .filter(taluk => taluk['Village Name'] && taluk['Village Name'].trim()) // Exclude null or empty village names
-                    .map(taluk => taluk['Village Name'].trim().toLowerCase()) // Normalize case and remove extra spaces
+                    .filter(taluk => taluk['Village Name'] && taluk['Village Name'].trim())
+                    .map(taluk => taluk['Village Name'].trim().toLowerCase())
             );
             document.getElementById('village-count').innerText = `${uniqueVillages.size} Villages`;
         }
@@ -171,7 +191,6 @@
             const searchQuery = document.getElementById('search-bar').value.toLowerCase();
             const selectedTaluk = document.getElementById('taluk-dropdown').value;
     
-            // Filter the taluks based on both the search query and the selected Taluk
             const filteredTaluks = allTaluks.filter(taluk => {
                 const matchesSearch = taluk.Taluk.toLowerCase().includes(searchQuery) ||
                                       taluk['Village Name'].toLowerCase().includes(searchQuery) ||
@@ -182,8 +201,8 @@
                 return matchesSearch && matchesTalukFilter;
             });
     
-            displayTaluks(filteredTaluks); // Display the filtered taluks
-            updateVillageCount(filteredTaluks); // Update the village count based on filtered results
+            displayTaluks(filteredTaluks); 
+            updateVillageCount(filteredTaluks); 
         }
     </script>
 </body>
