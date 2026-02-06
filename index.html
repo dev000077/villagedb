@@ -4,143 +4,129 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Chilanka&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Chilanka&display=swap" rel="stylesheet">
 
 <title>ENTE VILLAGE | KSITM Alappuzha</title>
 
 <style>
 :root {
-    --primary: #2563eb;
-    --secondary: #0f172a;
-    --bg: #f1f5f9;
+    --bg: #f5f7fa;
     --card: #ffffff;
-    --muted: #64748b;
+    --border: #dcdfe3;
+    --text: #1f2937;
+    --muted: #6b7280;
+    --accent: #1d4ed8;
 }
 
 /* Base */
 body {
     margin: 0;
-    font-family: 'Inter', sans-serif;
     background: var(--bg);
-    color: var(--secondary);
+    font-family: 'Inter', sans-serif;
+    color: var(--text);
 }
 
 /* Header */
 .header {
-    background: linear-gradient(135deg, #2563eb, #1e40af);
-    color: #fff;
-    padding: 30px 20px;
+    background: #ffffff;
+    border-bottom: 2px solid var(--border);
+    padding: 20px;
     text-align: center;
 }
 .header h1 {
     margin: 0;
     font-family: Chilanka;
-    font-size: 2.2rem;
+    font-size: 1.9rem;
 }
 .header p {
     margin: 6px 0 0;
-    opacity: 0.95;
+    color: var(--muted);
 }
 
 /* Container */
 .container {
     max-width: 1100px;
-    margin: -30px auto 40px;
-    padding: 0 15px;
+    margin: 20px auto;
+    padding: 0 16px;
 }
 
 /* Filters */
 .filters {
-    background: #fff;
-    padding: 20px;
-    border-radius: 14px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.08);
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
-    align-items: center;
-    justify-content: space-between;
-}
-
-.filters-left {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 15px;
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
+    align-items: center;
 }
 
 .filters input,
 .filters select {
-    padding: 10px 14px;
-    border-radius: 10px;
-    border: 1px solid #e2e8f0;
+    padding: 8px 10px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
     font-size: 0.95rem;
-    min-width: 200px;
-    outline: none;
+    min-width: 220px;
 }
 
 .filters input:focus,
 .filters select:focus {
-    border-color: var(--primary);
-    box-shadow: 0 0 0 2px rgba(37,99,235,0.15);
+    outline: none;
+    border-color: var(--accent);
 }
 
 .count {
+    margin-left: auto;
     font-weight: 600;
-    color: var(--primary);
+    color: var(--accent);
 }
 
 /* Meta */
 .meta {
-    margin: 10px 5px;
+    margin: 8px 2px;
     font-size: 0.85rem;
     color: var(--muted);
     text-align: right;
 }
 
-/* Cards Grid */
-.list {
-    margin-top: 20px;
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 16px;
+/* Card List */
+.card-list {
+    margin-top: 15px;
 }
 
 /* Card */
 .card {
     background: var(--card);
-    border-radius: 14px;
-    padding: 18px;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.06);
-    transition: transform .15s ease, box-shadow .15s ease;
-}
-.card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 12px 30px rgba(0,0,0,0.1);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 14px 16px;
+    margin-bottom: 12px;
 }
 
+/* Card content (LEFT ALIGNED) */
 .card h3 {
-    margin: 0 0 6px;
-    font-size: 1.1rem;
-    color: var(--primary);
+    margin: 0 0 8px;
+    font-size: 1.05rem;
+    color: var(--accent);
 }
 
 .card p {
     margin: 4px 0;
-    font-size: 0.9rem;
-    color: #334155;
+    font-size: 0.92rem;
 }
 
-.card span {
+.card p span {
+    font-weight: 600;
     color: var(--muted);
 }
 
 /* Loading */
 .loading {
     text-align: center;
-    margin-top: 30px;
     color: var(--muted);
+    padding: 20px;
 }
 
 /* Responsive */
@@ -149,9 +135,9 @@ body {
         flex-direction: column;
         align-items: stretch;
     }
-    .filters input,
-    .filters select {
-        width: 100%;
+    .count {
+        margin-left: 0;
+        text-align: left;
     }
 }
 </style>
@@ -167,19 +153,18 @@ body {
 <div class="container">
 
     <div class="filters">
-        <div class="filters-left">
-            <input type="text" id="search-bar" placeholder="🔍 Search village, taluk, officer, phone…" oninput="filterTaluks()">
-            <select id="taluk-dropdown" onchange="filterTaluks()">
-                <option value="">All Taluks</option>
-            </select>
-        </div>
+        <input type="text" id="search-bar" placeholder="Search village, taluk, officer, phone…" oninput="filterTaluks()">
+        <select id="taluk-dropdown" onchange="filterTaluks()">
+            <option value="">All Taluks</option>
+        </select>
         <div class="count" id="village-count">0 Villages</div>
     </div>
 
     <div class="meta" id="last-updated"></div>
 
     <div class="loading" id="loading-message">Loading data…</div>
-    <div class="list" id="taluk-list"></div>
+
+    <div class="card-list" id="taluk-list"></div>
 
 </div>
 
@@ -194,14 +179,14 @@ fetch(githubApiUrl)
     .then(r => r.json())
     .then(c => {
         document.getElementById('last-updated').innerText =
-            'Last updated: ' + new Date(c.commit.committer.date).toLocaleString();
+            'Last Updated: ' + new Date(c.commit.committer.date).toLocaleString();
         return fetch(jsonUrl);
     })
     .then(r => r.json())
     .then(data => {
         allTaluks = data;
         populateTalukDropdown();
-        displayTaluks(allTaluks);
+        renderCards(allTaluks);
         updateVillageCount(allTaluks);
         document.getElementById('loading-message').style.display = 'none';
     });
@@ -217,7 +202,7 @@ function populateTalukDropdown() {
         });
 }
 
-function displayTaluks(data) {
+function renderCards(data) {
     const list = document.getElementById('taluk-list');
     list.innerHTML = '';
 
@@ -227,7 +212,7 @@ function displayTaluks(data) {
         card.innerHTML = `
             <h3>${t['Village Name'] ?? ''}</h3>
             <p><span>Taluk:</span> ${t['Taluk'] ?? ''}</p>
-            <p><span>Officer:</span> ${t['Village Officer Name'] ?? ''}</p>
+            <p><span>Village Officer:</span> ${t['Village Officer Name'] ?? ''}</p>
             <p><span>Mobile:</span> ${t['Mobile_Number'] ?? ''}</p>
             <p><span>Email:</span> ${t['Official Mail ID'] ?? ''}</p>
             <p><span>Pincode:</span> ${t['Pincode'] ?? ''}</p>
@@ -253,7 +238,7 @@ function filterTaluks() {
                (taluk === '' || String(t['Taluk'] ?? '').trim() === taluk);
     });
 
-    displayTaluks(filtered);
+    renderCards(filtered);
     updateVillageCount(filtered);
 }
 </script>
