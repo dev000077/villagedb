@@ -6,72 +6,182 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Chilanka&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Chilanka&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 
-<title>Village Data Base | KSITM Alappuzha</title>
+<title>ENTE VILLAGE | KSITM Alappuzha</title>
 
 <style>
+:root {
+    --primary: #2563eb;
+    --secondary: #0f172a;
+    --bg: #f1f5f9;
+    --card: #ffffff;
+    --muted: #64748b;
+}
+
+/* Base */
 body {
-    font-family: Arial, sans-serif;
     margin: 0;
+    font-family: 'Inter', sans-serif;
+    background: var(--bg);
+    color: var(--secondary);
+}
+
+/* Header */
+.header {
+    background: linear-gradient(135deg, #2563eb, #1e40af);
+    color: #fff;
+    padding: 30px 20px;
+    text-align: center;
+}
+.header h1 {
+    margin: 0;
+    font-family: Chilanka;
+    font-size: 2.2rem;
+}
+.header p {
+    margin: 6px 0 0;
+    opacity: 0.95;
+}
+
+/* Container */
+.container {
+    max-width: 1100px;
+    margin: -30px auto 40px;
+    padding: 0 15px;
+}
+
+/* Filters */
+.filters {
+    background: #fff;
     padding: 20px;
-    background-color: #f4f4f4;
-}
-h1, p { text-align: center; }
-#filters {
+    border-radius: 14px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.08);
     display: flex;
-    justify-content: center;
-    gap: 10px;
-    margin-bottom: 20px;
-    align-items: center;
     flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+    justify-content: space-between;
 }
-#search-bar, #taluk-dropdown {
-    padding: 8px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    font-size: 1em;
+
+.filters-left {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
 }
-#village-count { font-weight: bold; }
-#last-updated {
-    position: fixed;
-    top: 10px;
-    right: 20px;
-    font-size: 0.85em;
-    background: #fff;
-    padding: 5px 10px;
-    border-radius: 5px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+
+.filters input,
+.filters select {
+    padding: 10px 14px;
+    border-radius: 10px;
+    border: 1px solid #e2e8f0;
+    font-size: 0.95rem;
+    min-width: 200px;
+    outline: none;
 }
-#taluk-list { list-style: none; padding: 0; }
-.taluk-item {
-    background: #fff;
-    padding: 15px;
-    margin-bottom: 10px;
-    border-radius: 6px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+
+.filters input:focus,
+.filters select:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 2px rgba(37,99,235,0.15);
 }
-.taluk-item h3 { margin: 0 0 5px; }
+
+.count {
+    font-weight: 600;
+    color: var(--primary);
+}
+
+/* Meta */
+.meta {
+    margin: 10px 5px;
+    font-size: 0.85rem;
+    color: var(--muted);
+    text-align: right;
+}
+
+/* Cards Grid */
+.list {
+    margin-top: 20px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 16px;
+}
+
+/* Card */
+.card {
+    background: var(--card);
+    border-radius: 14px;
+    padding: 18px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+    transition: transform .15s ease, box-shadow .15s ease;
+}
+.card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.1);
+}
+
+.card h3 {
+    margin: 0 0 6px;
+    font-size: 1.1rem;
+    color: var(--primary);
+}
+
+.card p {
+    margin: 4px 0;
+    font-size: 0.9rem;
+    color: #334155;
+}
+
+.card span {
+    color: var(--muted);
+}
+
+/* Loading */
+.loading {
+    text-align: center;
+    margin-top: 30px;
+    color: var(--muted);
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+    .filters {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .filters input,
+    .filters select {
+        width: 100%;
+    }
+}
 </style>
 </head>
 
 <body>
 
-<h1 style="font-family: Chilanka;">ENTE VILLAGE-എന്റെ വില്ലേജ്</h1>
-<p style="font-family: Chilanka;">ആലപ്പുഴ ജില്ലയിലെ വില്ലേജ് ഓഫീസുകളുടെ ഒരു കുട്ടി ഡാറ്റാബേസ്</p>
-<p style="font-family: Chilanka;">A tiny database of village offices in Alappuzha district</p>
-
-<div id="filters">
-    <input type="text" id="search-bar" placeholder="Search anything..." oninput="filterTaluks()">
-    <select id="taluk-dropdown" onchange="filterTaluks()">
-        <option value="">Select Taluk</option>
-    </select>
-    <span id="village-count">0 Villages</span>
+<div class="header">
+    <h1>ENTE VILLAGE – എന്റെ വില്ലേജ്</h1>
+    <p>Village Offices of Alappuzha District</p>
 </div>
 
-<div id="loading-message" style="text-align:center;">Loading...</div>
-<ul id="taluk-list"></ul>
-<div id="last-updated"></div>
+<div class="container">
+
+    <div class="filters">
+        <div class="filters-left">
+            <input type="text" id="search-bar" placeholder="🔍 Search village, taluk, officer, phone…" oninput="filterTaluks()">
+            <select id="taluk-dropdown" onchange="filterTaluks()">
+                <option value="">All Taluks</option>
+            </select>
+        </div>
+        <div class="count" id="village-count">0 Villages</div>
+    </div>
+
+    <div class="meta" id="last-updated"></div>
+
+    <div class="loading" id="loading-message">Loading data…</div>
+    <div class="list" id="taluk-list"></div>
+
+</div>
 
 <script>
 const jsonUrl = 'https://raw.githubusercontent.com/josephjosedev/TESTNODE/main/villagedb.json';
@@ -81,94 +191,66 @@ let allTaluks = [];
 
 /* Fetch data */
 fetch(githubApiUrl)
-    .then(res => res.json())
-    .then(commit => {
-        const d = new Date(commit.commit.committer.date);
+    .then(r => r.json())
+    .then(c => {
         document.getElementById('last-updated').innerText =
-            'Last Updated: ' + d.toLocaleString();
+            'Last updated: ' + new Date(c.commit.committer.date).toLocaleString();
         return fetch(jsonUrl);
     })
-    .then(res => res.json())
+    .then(r => r.json())
     .then(data => {
         allTaluks = data;
         populateTalukDropdown();
         displayTaluks(allTaluks);
         updateVillageCount(allTaluks);
         document.getElementById('loading-message').style.display = 'none';
-    })
-    .catch(() => {
-        document.getElementById('loading-message').innerText = 'Failed to load data';
     });
 
-/* Populate dropdown */
 function populateTalukDropdown() {
     const dropdown = document.getElementById('taluk-dropdown');
-    const taluks = [...new Set(
-        allTaluks.map(t => String(t['Taluk'] ?? '').trim()).filter(Boolean)
-    )];
-
-    taluks.forEach(t => {
-        const opt = document.createElement('option');
-        opt.value = t;
-        opt.textContent = t;
-        dropdown.appendChild(opt);
-    });
+    [...new Set(allTaluks.map(t => String(t['Taluk'] ?? '').trim()).filter(Boolean))]
+        .forEach(t => {
+            const o = document.createElement('option');
+            o.value = t;
+            o.textContent = t;
+            dropdown.appendChild(o);
+        });
 }
 
-/* Render cards */
 function displayTaluks(data) {
     const list = document.getElementById('taluk-list');
     list.innerHTML = '';
 
     data.forEach(t => {
-        const li = document.createElement('li');
-        li.className = 'taluk-item';
-        li.innerHTML = `
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `
             <h3>${t['Village Name'] ?? ''}</h3>
-            <p><strong>Taluk:</strong> ${t['Taluk'] ?? ''}</p>
-            <p><strong>Village Officer:</strong> ${t['Village Officer Name'] ?? ''}</p>
-            <p><strong>Mobile:</strong> ${t['Mobile_Number'] ?? ''}</p>
-            <p><strong>Email:</strong> ${t['Official Mail ID'] ?? ''}</p>
-            <p><strong>Pincode:</strong> ${t['Pincode'] ?? ''}</p>
-            <p><strong>FTTH No:</strong> ${t['FTTH NO.'] ?? ''}</p>
+            <p><span>Taluk:</span> ${t['Taluk'] ?? ''}</p>
+            <p><span>Officer:</span> ${t['Village Officer Name'] ?? ''}</p>
+            <p><span>Mobile:</span> ${t['Mobile_Number'] ?? ''}</p>
+            <p><span>Email:</span> ${t['Official Mail ID'] ?? ''}</p>
+            <p><span>Pincode:</span> ${t['Pincode'] ?? ''}</p>
         `;
-        list.appendChild(li);
+        list.appendChild(card);
     });
 }
 
-/* Count villages */
 function updateVillageCount(data) {
-    const villages = new Set(
-        data
-            .map(t => String(t['Village Name'] ?? '').trim().toLowerCase())
-            .filter(Boolean)
+    const v = new Set(
+        data.map(t => String(t['Village Name'] ?? '').toLowerCase()).filter(Boolean)
     );
-    document.getElementById('village-count').innerText =
-        `${villages.size} Villages`;
+    document.getElementById('village-count').innerText = `${v.size} Villages`;
 }
 
-/* 🔍 FINAL SEARCH (FULL JSON TEXT SEARCH) */
 function filterTaluks() {
-    const query = document.getElementById('search-bar').value
-        .trim()
-        .toLowerCase();
+    const q = document.getElementById('search-bar').value.toLowerCase().trim();
+    const taluk = document.getElementById('taluk-dropdown').value;
 
-    const selectedTaluk = document.getElementById('taluk-dropdown').value;
-
-    const filtered = allTaluks.filter(taluk => {
-
-        // 🔹 Convert entire object to searchable text
-        const fullText = Object.entries(taluk)
-            .map(([_, v]) => String(v ?? ''))
-            .join(' ')
-            .toLowerCase();
-
-        const matchSearch = query === '' || fullText.includes(query);
-        const matchTaluk =
-            selectedTaluk === '' ||
-            String(taluk['Taluk'] ?? '').trim() === selectedTaluk;
-
-        return matchSearch && matchTaluk;
+    const filtered = allTaluks.filter(t => {
+        const text = Object.values(t).map(v => String(v ?? '')).join(' ').toLowerCase();
+        return (q === '' || text.includes(q)) &&
+               (taluk === '' || String(t['Taluk'] ?? '').trim() === taluk);
     });
 
     displayTaluks(filtered);
