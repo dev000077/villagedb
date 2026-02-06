@@ -1,214 +1,180 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Chilanka&display=swap" rel="stylesheet">
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-W13FX0Y12R"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-W13FX0Y12R');
-    </script>
-    <title>Village Data Base | KSITM Alappuzha | Village Offices in Alappuzha</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 20px;
-            background-color: #f4f4f4;
-        }
-        h1 {
-            text-align: center;
-        }
-        #filters {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 20px;
-            align-items: center;
-        }
-        #search-bar {
-            width: 200px;
-            padding: 8px;
-            margin-right: 20px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 1em;
-        }
-        #taluk-dropdown {
-            padding: 8px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 1em;
-        }
-        #village-count {
-            margin-left: 10px;
-            font-size: 1em;
-            font-weight: bold;
-            color: #333;
-        }
-        #last-updated {
-            position: fixed;
-            top: 10px;
-            right: 20px;
-            font-size: 0.9em;
-            color: #666;
-            background-color: #fff;
-            padding: 5px 10px;
-            border-radius: 5px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-        #taluk-list {
-            list-style-type: none;
-            padding: 0;
-        }
-        .taluk-item {
-            background-color: white;
-            border-radius: 5px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            margin: 10px 0;
-            padding: 15px;
-        }
-        .taluk-item h3 {
-            margin: 0;
-            font-size: 1.5em;
-            color: #333;
-        }
-        .taluk-item p {
-            margin: 5px 0 10px;
-            color: #555;
-            font-size: 1em;
-        }
-    </style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chilanka&display=swap" rel="stylesheet">
+
+<title>Village Data Base | KSITM Alappuzha</title>
+
+<style>
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+    background-color: #f4f4f4;
+}
+h1, p { text-align: center; }
+#filters {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 20px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+#search-bar, #taluk-dropdown {
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1em;
+}
+#village-count { font-weight: bold; }
+#last-updated {
+    position: fixed;
+    top: 10px;
+    right: 20px;
+    font-size: 0.85em;
+    background: #fff;
+    padding: 5px 10px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+#taluk-list { list-style: none; padding: 0; }
+.taluk-item {
+    background: #fff;
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 6px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+.taluk-item h3 { margin: 0 0 5px; }
+</style>
 </head>
+
 <body>
 
-    <h1 style="text-align: center;font-family: Chilanka;serif;font-weight: 400;font-style: normal;">ENTE VILLAGE-എന്റെ വില്ലേജ്</h1>
-    <p style="text-align: center;font-family: Chilanka;serif;font-weight: 400;font-style: normal;">
-        ആലപ്പുഴ ജില്ലയിലെ  വില്ലേജ് ഓഫീസുകൾ സംബന്ധിച്ച  ഒരു കുട്ടി ഡാറ്റാബേസ്
-    </p>
+<h1 style="font-family: Chilanka;">ENTE VILLAGE-എന്റെ വില്ലേജ്</h1>
+<p style="font-family: Chilanka;">ആലപ്പുഴ ജില്ലയിലെ വില്ലേജ് ഓഫീസുകളുടെ ഒരു കുട്ടി ഡാറ്റാബേസ്</p>
+<p style="font-family: Chilanka;">A tiny database of village offices in Alappuzha district</p>
 
-     <p style="text-align: center;font-family: Chilanka;serif;font-weight: 400;font-style: normal;">
-        A tiny database of village offices in Alappuzha district.
-    </p>
+<div id="filters">
+    <input type="text" id="search-bar" placeholder="Search anything..." oninput="filterTaluks()">
+    <select id="taluk-dropdown" onchange="filterTaluks()">
+        <option value="">Select Taluk</option>
+    </select>
+    <span id="village-count">0 Villages</span>
+</div>
 
-    <!-- Filters Section (Search Bar + Taluk Dropdown) -->
-    <div id="filters">
-        <input type="text" id="search-bar" placeholder="Search..." oninput="filterTaluks()" />
-        <select id="taluk-dropdown" onchange="filterTaluks()">
-            <option value="">Select Taluk</option>
-        </select>
-        <span id="village-count">0 Villages</span>
-    </div>
+<div id="loading-message" style="text-align:center;">Loading...</div>
+<ul id="taluk-list"></ul>
+<div id="last-updated"></div>
 
-    <div id="loading-message" style="text-align: center;">Loading...</div>
-    <ul id="taluk-list"></ul>
+<script>
+const jsonUrl = 'https://raw.githubusercontent.com/josephjosedev/TESTNODE/main/villagedb.json';
+const githubApiUrl = 'https://api.github.com/repos/josephjosedev/TESTNODE/commits/main';
 
-    <div id="last-updated"></div>
+let allTaluks = [];
 
-    <script>
-        const jsonUrl = 'https://raw.githubusercontent.com/josephjosedev/TESTNODE/main/villagedb.json';
-        const githubApiUrl = 'https://api.github.com/repos/josephjosedev/TESTNODE/commits/main'; // GitHub API to get last commit details
-    
-        let allTaluks = [];
-    
-        // Fetch the JSON data and get the last updated timestamp from GitHub
-        fetch(githubApiUrl)
-            .then(response => response.json())
-            .then(data => {
-                const lastUpdated = data.commit.committer.date; // Get the last commit date from the GitHub API
-                
-                // Format the last updated date
-                const updatedDate = new Date(lastUpdated);
-                const formattedDate = updatedDate.toLocaleString();
+/* Fetch data */
+fetch(githubApiUrl)
+    .then(res => res.json())
+    .then(commit => {
+        const d = new Date(commit.commit.committer.date);
+        document.getElementById('last-updated').innerText =
+            'Last Updated: ' + d.toLocaleString();
+        return fetch(jsonUrl);
+    })
+    .then(res => res.json())
+    .then(data => {
+        allTaluks = data;
+        populateTalukDropdown();
+        displayTaluks(allTaluks);
+        updateVillageCount(allTaluks);
+        document.getElementById('loading-message').style.display = 'none';
+    })
+    .catch(() => {
+        document.getElementById('loading-message').innerText = 'Failed to load data';
+    });
 
-                document.getElementById('last-updated').innerText = `Last Updated: ${formattedDate}`;
+/* Populate dropdown */
+function populateTalukDropdown() {
+    const dropdown = document.getElementById('taluk-dropdown');
+    const taluks = [...new Set(
+        allTaluks.map(t => String(t['Taluk'] ?? '').trim()).filter(Boolean)
+    )];
 
-                // Now, fetch the village data
-                return fetch(jsonUrl);
-            })
-            .then(response => response.json())
-            .then(data => {
-                allTaluks = data;
-                populateTalukDropdown(); // Populate the dropdown with Taluks
-                displayTaluks(allTaluks); // Display all taluks initially
-                updateVillageCount(allTaluks); // Set initial unique village count
-                document.getElementById('loading-message').style.display = 'none'; // Hide the loading message
-            })
-            .catch(error => {
-                console.error('Error fetching data:', error);
-                document.getElementById('loading-message').innerText = 'Failed to load data';
-            });
-    
-        // Populate the dropdown with unique Taluk options
-        function populateTalukDropdown() {
-            const talukDropdown = document.getElementById('taluk-dropdown');
-            const taluks = [...new Set(allTaluks.map(taluk => taluk['Taluk']))]; // Get unique Taluks
-            taluks.forEach(taluk => {
-                const option = document.createElement('option');
-                option.value = taluk;
-                option.innerText = taluk;
-                talukDropdown.appendChild(option);
-            });
-        }
-    
-        // Function to display the taluks
-        function displayTaluks(taluks) {
-            const taluksList = document.getElementById('taluk-list');
-            taluksList.innerHTML = ''; // Clear the list before re-rendering
-    
-            taluks.forEach(taluk => {
-                const listItem = document.createElement('li');
-                listItem.className = 'taluk-item';
-    
-                let talukHtml = `
-                    <h3>${taluk['Village Name']}</h3>
-                    <p><strong>Village Name:</strong> ${taluk['Village Name']}</p>
-                    <p><strong>Taluk:</strong> ${taluk['Taluk']}</p>
-                    <p><strong>Village Officer Name:</strong> ${taluk['Village Officer Name']}</p>
-                    <p><strong>Mobile Number:</strong> ${taluk['Mobile_Number']}</p>
-                    <p><strong>e-Mail ID:</strong> ${taluk['Official Mail ID']}</p>
-                    <p><strong>Pincode:</strong> ${taluk['Pincode']}</p>
-                    <p><strong>FTTH No:</strong> ${taluk['FTTH NO.']}</p>
-                `;
-    
-                listItem.innerHTML = talukHtml;
-                taluksList.appendChild(listItem);
-            });
-        }
-    
-        // Function to update the village count, excluding null or empty village names
-        function updateVillageCount(taluks) {
-            const uniqueVillages = new Set(
-                taluks
-                    .filter(taluk => taluk['Village Name'] && taluk['Village Name'].trim())
-                    .map(taluk => taluk['Village Name'].trim().toLowerCase())
-            );
-            document.getElementById('village-count').innerText = `${uniqueVillages.size} Villages`;
-        }
-    
-        // Function to filter taluks based on the search query and dropdown selection
-        function filterTaluks() {
-            const searchQuery = document.getElementById('search-bar').value.toLowerCase();
-            const selectedTaluk = document.getElementById('taluk-dropdown').value;
-    
-            const filteredTaluks = allTaluks.filter(taluk => {
-                const matchesSearch = taluk.Taluk.toLowerCase().includes(searchQuery) ||
-                                      taluk['Village Name'].toLowerCase().includes(searchQuery) ||
-                                      taluk['Village Officer Name'].toLowerCase().includes(searchQuery) ||
-                                      taluk['Official Mail ID'].toLowerCase().includes(searchQuery) ||
-                                      taluk['Pincode'].toLowerCase().includes(searchQuery);
-                const matchesTalukFilter = selectedTaluk === "" || taluk.Taluk === selectedTaluk;
-                return matchesSearch && matchesTalukFilter;
-            });
-    
-            displayTaluks(filteredTaluks); 
-            updateVillageCount(filteredTaluks); 
-        }
-    </script>
+    taluks.forEach(t => {
+        const opt = document.createElement('option');
+        opt.value = t;
+        opt.textContent = t;
+        dropdown.appendChild(opt);
+    });
+}
+
+/* Render cards */
+function displayTaluks(data) {
+    const list = document.getElementById('taluk-list');
+    list.innerHTML = '';
+
+    data.forEach(t => {
+        const li = document.createElement('li');
+        li.className = 'taluk-item';
+        li.innerHTML = `
+            <h3>${t['Village Name'] ?? ''}</h3>
+            <p><strong>Taluk:</strong> ${t['Taluk'] ?? ''}</p>
+            <p><strong>Village Officer:</strong> ${t['Village Officer Name'] ?? ''}</p>
+            <p><strong>Mobile:</strong> ${t['Mobile_Number'] ?? ''}</p>
+            <p><strong>Email:</strong> ${t['Official Mail ID'] ?? ''}</p>
+            <p><strong>Pincode:</strong> ${t['Pincode'] ?? ''}</p>
+            <p><strong>FTTH No:</strong> ${t['FTTH NO.'] ?? ''}</p>
+        `;
+        list.appendChild(li);
+    });
+}
+
+/* Count villages */
+function updateVillageCount(data) {
+    const villages = new Set(
+        data
+            .map(t => String(t['Village Name'] ?? '').trim().toLowerCase())
+            .filter(Boolean)
+    );
+    document.getElementById('village-count').innerText =
+        `${villages.size} Villages`;
+}
+
+/* 🔍 FINAL SEARCH (FULL JSON TEXT SEARCH) */
+function filterTaluks() {
+    const query = document.getElementById('search-bar').value
+        .trim()
+        .toLowerCase();
+
+    const selectedTaluk = document.getElementById('taluk-dropdown').value;
+
+    const filtered = allTaluks.filter(taluk => {
+
+        // 🔹 Convert entire object to searchable text
+        const fullText = Object.entries(taluk)
+            .map(([_, v]) => String(v ?? ''))
+            .join(' ')
+            .toLowerCase();
+
+        const matchSearch = query === '' || fullText.includes(query);
+        const matchTaluk =
+            selectedTaluk === '' ||
+            String(taluk['Taluk'] ?? '').trim() === selectedTaluk;
+
+        return matchSearch && matchTaluk;
+    });
+
+    displayTaluks(filtered);
+    updateVillageCount(filtered);
+}
+</script>
+
 </body>
 </html>
