@@ -1,249 +1,93 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ENTE VILLAGE |Village Directory</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Chilanka&display=swap" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Chilanka&display=swap"
+        rel="stylesheet">
 
-<title>ENTE VILLAGE | KSITM Alappuzha</title>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
 
-<style>
-:root {
-    --bg: #f5f7fa;
-    --card: #ffffff;
-    --border: #dcdfe3;
-    --text: #1f2937;
-    --muted: #6b7280;
-    --accent: #1d4ed8;
-}
-
-/* Base */
-body {
-    margin: 0;
-    background: var(--bg);
-    font-family: 'Inter', sans-serif;
-    color: var(--text);
-}
-
-/* Header */
-.header {
-    background: #ffffff;
-    border-bottom: 2px solid var(--border);
-    padding: 20px;
-    text-align: center;
-}
-.header h1 {
-    margin: 0;
-    font-family: Chilanka;
-    font-size: 1.9rem;
-}
-.header p {
-    margin: 6px 0 0;
-    color: var(--muted);
-}
-
-/* Container */
-.container {
-    max-width: 1100px;
-    margin: 20px auto;
-    padding: 0 16px;
-}
-
-/* Filters */
-.filters {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    padding: 15px;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    align-items: center;
-}
-
-.filters input,
-.filters select {
-    padding: 8px 10px;
-    border: 1px solid var(--border);
-    border-radius: 4px;
-    font-size: 0.95rem;
-    min-width: 220px;
-}
-
-.filters input:focus,
-.filters select:focus {
-    outline: none;
-    border-color: var(--accent);
-}
-
-.count {
-    margin-left: auto;
-    font-weight: 600;
-    color: var(--accent);
-}
-
-/* Meta */
-.meta {
-    margin: 8px 2px;
-    font-size: 0.85rem;
-    color: var(--muted);
-    text-align: right;
-}
-
-/* Card List */
-.card-list {
-    margin-top: 15px;
-}
-
-/* Card */
-.card {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    padding: 14px 16px;
-    margin-bottom: 12px;
-}
-
-/* Card content (LEFT ALIGNED) */
-.card h3 {
-    margin: 0 0 8px;
-    font-size: 1.05rem;
-    color: var(--accent);
-}
-
-.card p {
-    margin: 4px 0;
-    font-size: 0.92rem;
-}
-
-.card p span {
-    font-weight: 600;
-    color: var(--muted);
-}
-
-/* Loading */
-.loading {
-    text-align: center;
-    color: var(--muted);
-    padding: 20px;
-}
-
-/* Responsive */
-@media (max-width: 600px) {
-    .filters {
-        flex-direction: column;
-        align-items: stretch;
-    }
-    .count {
-        margin-left: 0;
-        text-align: left;
-    }
-}
-</style>
+    <link rel="stylesheet" href="index.css">
 </head>
 
 <body>
+    <div class="glass-background"></div>
 
-<div class="header">
-    <h1>ENTE VILLAGE – എന്റെ വില്ലേജ്</h1>
-    <p style="font-family: Chilanka;">ആലപ്പുഴ ജില്ലയിലെ വില്ലേജ് ഓഫീസുകളുടെ ഒരു കുട്ടി ഡാറ്റാബേസ്</p>
-    <p>Village Offices of Alappuzha District</p>
-</div>
+    <header class="main-header">
+        <div class="header-content">
+            <h1 class="logo-malayalam">എന്റെ വില്ലേജ്</h1>
+            <p class="logo-sub-malayalam">ആലപ്പുഴ ജില്ലയിലെ വില്ലേജ് ഓഫീസുകളുടെ ഒരു കുട്ടി ഡാറ്റാബേസ്</p>
+        </div>
+    </header>
 
-<div class="container">
+    <main class="container">
+        <section class="stats-ribbon">
+            <div class="stat-card">
+                <i data-lucide="building-2"></i>
+                <div>
+                    <span class="stat-value" id="total-villages">0</span>
+                    <span class="stat-label">Villages</span>
+                </div>
+            </div>
+            <div class="stat-card">
+                <i data-lucide="layers"></i>
+                <div>
+                    <span class="stat-value" id="total-taluks">0</span>
+                    <span class="stat-label">Taluks</span>
+                </div>
+            </div>
+            <div class="stat-card">
+                <i data-lucide="shield-check"></i>
+                <div>
+                    <span class="stat-value">2</span>
+                    <span class="stat-label">RDOs</span>
+                </div>
+            </div>
+        </section>
 
-    <div class="filters">
-        <input type="text" id="search-bar" placeholder="Search village, taluk, officer, phone…" oninput="filterTaluks()">
-        <select id="taluk-dropdown" onchange="filterTaluks()">
-            <option value="">All Taluks</option>
-        </select>
-        <div class="count" id="village-count">0 Villages</div>
-    </div>
+        <section class="controls">
+            <div class="search-wrapper">
+                <i data-lucide="search" class="search-icon"></i>
+                <input type="text" id="search-bar" placeholder="Search village, officer, mobile..." autocomplete="off">
+            </div>
 
-    <div class="meta" id="last-updated"></div>
+            <div class="filter-group">
+                <div class="select-wrapper">
+                    <i data-lucide="filter" class="filter-icon"></i>
+                    <select id="taluk-dropdown">
+                        <option value="">All Taluks</option>
+                    </select>
+                </div>
+            </div>
+        </section>
 
-    <div class="loading" id="loading-message">Loading data…</div>
+        <section class="loader" id="loading-message">
+            <div class="spinner"></div>
+            <p>Gathering data...</p>
+        </section>
 
-    <div class="card-list" id="taluk-list"></div>
+        <section class="card-grid" id="village-list">
+            <!-- Cards will be injected here -->
+        </section>
+    </main>
 
-</div>
+    <footer class="main-footer">
+        <p>&copy; 2026 KSITM Alappuzha | Data sourced from Google Sheets</p>
+    </footer>
 
-<script>
-const jsonUrl = 'https://raw.githubusercontent.com/josephjosedev/TESTNODE/main/villagedb.json';
-const githubApiUrl = 'https://api.github.com/repos/josephjosedev/TESTNODE/commits/main';
-
-let allTaluks = [];
-
-/* Fetch data */
-fetch(githubApiUrl)
-    .then(r => r.json())
-    .then(c => {
-        document.getElementById('last-updated').innerText =
-            'Last Updated: ' + new Date(c.commit.committer.date).toLocaleString();
-        return fetch(jsonUrl);
-    })
-    .then(r => r.json())
-    .then(data => {
-        allTaluks = data;
-        populateTalukDropdown();
-        renderCards(allTaluks);
-        updateVillageCount(allTaluks);
-        document.getElementById('loading-message').style.display = 'none';
-    });
-
-function populateTalukDropdown() {
-    const dropdown = document.getElementById('taluk-dropdown');
-    [...new Set(allTaluks.map(t => String(t['Taluk'] ?? '').trim()).filter(Boolean))]
-        .forEach(t => {
-            const o = document.createElement('option');
-            o.value = t;
-            o.textContent = t;
-            dropdown.appendChild(o);
-        });
-}
-
-function renderCards(data) {
-    const list = document.getElementById('taluk-list');
-    list.innerHTML = '';
-
-    data.forEach(t => {
-        const card = document.createElement('div');
-        card.className = 'card';
-        card.innerHTML = `
-            <h3>${t['Village Name'] ?? ''}</h3>
-            <p><span>Taluk:</span> ${t['Taluk'] ?? ''}</p>
-            <p><span>Village Officer:</span> ${t['Village Officer Name'] ?? ''}</p>
-            <p><span>Mobile:</span> ${t['Mobile_Number'] ?? ''}</p>
-            <p><span>Email:</span> ${t['Official Mail ID'] ?? ''}</p>
-            <p><span>Pincode:</span> ${t['Pincode'] ?? ''}</p>
-            <p><span>FTTH No:</span> ${t['FTTH NO.'] ?? ''}</p>
-        `;
-        list.appendChild(card);
-    });
-}
-
-function updateVillageCount(data) {
-    const v = new Set(
-        data.map(t => String(t['Village Name'] ?? '').toLowerCase()).filter(Boolean)
-    );
-    document.getElementById('village-count').innerText = `${v.size} Villages`;
-}
-
-function filterTaluks() {
-    const q = document.getElementById('search-bar').value.toLowerCase().trim();
-    const taluk = document.getElementById('taluk-dropdown').value;
-
-    const filtered = allTaluks.filter(t => {
-        const text = Object.values(t).map(v => String(v ?? '')).join(' ').toLowerCase();
-        return (q === '' || text.includes(q)) &&
-               (taluk === '' || String(t['Taluk'] ?? '').trim() === taluk);
-    });
-
-    renderCards(filtered);
-    updateVillageCount(filtered);
-}
-</script>
-
+    <script src="app.js"></script>
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+    </script>
 </body>
+
 </html>
