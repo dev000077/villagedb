@@ -152,7 +152,7 @@ function createCard(data, index) {
     const phone = data[COLUMNS.PHONE] || 'N/A';
     const email = data[COLUMNS.EMAIL] || '';
     const pincode = data[COLUMNS.PINCODE] || 'N/A';
-    const FTTH NO. = data[COLUMNS.FTTH] || 'N/A';
+    // const FTTH NO. = data[COLUMNS.FTTH] || 'N/A';
 
     div.innerHTML = `
         <h3>${villageName}</h3>
@@ -177,10 +177,10 @@ function createCard(data, index) {
                 <span class="field-label">Pincode</span>
                 <span class="field-value">${pincode}</span>
             </div>
-               <div class="field">
-                <span class="field-label">FTTH No</span>
-                <span class="field-value">${FTTH}</span>
-            </div>
+            //    <div class="field">
+            //     <span class="field-label">FTTH No</span>
+            //     <span class="field-value">${FTTH}</span>
+            // </div>
 
             <div class="field full-width">
                 <span class="field-label">Official Email</span>
