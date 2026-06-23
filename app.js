@@ -152,7 +152,7 @@ function createCard(data, index) {
     const phone = data[COLUMNS.PHONE] || 'N/A';
     const email = data[COLUMNS.EMAIL] || '';
     const pincode = data[COLUMNS.PINCODE] || 'N/A';
-    const FTTH NO. = data[COLUMNS.FTTH] || 'N/A';
+    // const FTTH NO. = data[COLUMNS.FTTH] || 'N/A';
 
     div.innerHTML = `
         <h3>${villageName}</h3>
