@@ -177,10 +177,6 @@ function createCard(data, index) {
                 <span class="field-label">Pincode</span>
                 <span class="field-value">${pincode}</span>
             </div>
-            //    <div class="field">
-            //     <span class="field-label">FTTH No</span>
-            //     <span class="field-value">${FTTH}</span>
-            // </div>
 
             <div class="field full-width">
                 <span class="field-label">Official Email</span>
