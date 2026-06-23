@@ -179,7 +179,7 @@ function createCard(data, index) {
             </div>
                <div class="field">
                 <span class="field-label">FTTH No</span>
-                <span class="field-value">${FTTH NO.}</span>
+                <span class="field-value">${FTTH}</span>
             </div>
 
             <div class="field full-width">
